@@ -1,0 +1,43 @@
+### DEVO Config File ###
+
+# VO config (increase for better accuracy)
+PATCHES_PER_FRAME: 96
+REMOVAL_WINDOW: 22
+OPTIMIZATION_WINDOW: 10
+PATCH_LIFETIME: 13
+
+# threshold for keyframe removal
+KEYFRAME_THRESH: 5.0
+
+# camera motion model
+MOTION_MODEL: 'DAMPED_LINEAR'
+MOTION_DAMPING: 0.5
+
+# maybe use mixed precision for inference
+MIXED_PRECISION: True
+
+# Select between random, gradient, scorer
+PATCH_SELECTOR: 'scorer'
+# Normalizer (only evs): none, rescale, standard (std)
+NORM: 'std'
+# Eval mode of patch selector (3xrandom, topk, multinomial)
+SCORER_EVAL_MODE: 'multi'
+SCORER_EVAL_USE_GRID: True
+
+# For proximity loop closure 
+LOOP_CLOSURE: False
+BACKEND_THRESH: 64.0
+MAX_EDGE_AGE: 1000
+GLOBAL_OPT_FREQ: 15
+
+# For IMU integration
+ENALBE_IMU: True
+Ti1c: [0.9998771896957381,   -0.015128404695721132, -0.004091075349566317, -0.002760732198752687,      
+       0.015081690576531692,  0.9998233340761795,   -0.011217987615716542, -0.001652095229536009,
+       0.004260062852482415,  0.011154909598696812,  0.99992871,           -0.017829494499329843,
+       0.0,                   0.0,                   0.0,                   1.0]
+ENALBE_INV: True
+accel_noise_sigma: 0.1  # 0.2
+gyro_noise_sigma: 0.05
+accel_bias_sigma: 0.002
+gyro_bias_sigma: 4.0e-5
