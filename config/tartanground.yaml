@@ -1,0 +1,50 @@
+### DEIO config for TartanGround (devogam) ###
+# Mirrors cfg/eval/eval_tartanground.yaml's operating point so the DEIO row of
+# the baseline table differs from ours only in how the IMU is used.
+
+PATCHES_PER_FRAME: 96
+REMOVAL_WINDOW: 22
+OPTIMIZATION_WINDOW: 10
+PATCH_LIFETIME: 13
+
+KEYFRAME_THRESH: 15.0
+
+MOTION_MODEL: 'DAMPED_LINEAR'
+MOTION_DAMPING: 0.5
+
+MIXED_PRECISION: True
+
+PATCH_SELECTOR: 'scorer'
+# voxel_grid reps -> std, matching eval.py's rule (NORM follows the rep)
+NORM: 'std'
+SCORER_EVAL_MODE: 'multi'
+SCORER_EVAL_USE_GRID: True
+
+LOOP_CLOSURE: False
+BACKEND_THRESH: 64.0
+MAX_EDGE_AGE: 1000
+GLOBAL_OPT_FREQ: 15
+
+# --- IMU ---
+ENALBE_IMU: True
+
+# T_imu_cam. TartanGround's IMU body frame IS lcam_front (no lever arm, no
+# relative rotation -- verified to machine precision), but the *VO* works in the
+# optical convention that eval.py reaches via the NED->camera permutation
+# P: (x,y,z)->(y,z,x). A vector in camera(optical) coords becomes P^T v in the
+# native body coords the IMU is expressed in, so R_imu_cam = P^T.
+Ti1c: [0.0, 0.0, 1.0, 0.0,
+       1.0, 0.0, 0.0, 0.0,
+       0.0, 1.0, 0.0, 0.0,
+       0.0, 0.0, 0.0, 1.0]
+ENALBE_INV: False
+
+# TartanGround's IMU is noise-free and bias-free (verified: gravity relation
+# exact to 2e-12, dead-reckoning drift 0.038 % of path). These are therefore
+# small regularising values rather than a sensor model -- zeros would make the
+# preintegration covariance singular. Raise them together with any noise
+# injection experiment.
+accel_noise_sigma: 1.0000e-3
+gyro_noise_sigma: 1.0000e-4
+accel_bias_sigma: 1.0000e-4
+gyro_bias_sigma: 1.0000e-5
